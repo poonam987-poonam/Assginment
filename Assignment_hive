@@ -1,1 +1,4 @@
 #download the Data file  ----> https://github.com/poonam987-poonam/Assginment/blob/main/sales_order_data.csv
+create database hive_class_b1;
+show databases;
+use hive_class_b1;
