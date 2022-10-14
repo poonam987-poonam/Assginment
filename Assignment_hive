@@ -45,4 +45,4 @@ hive> load data inpath '/tmp/data_2/sales_order_data.csv' into table sales_order
 
 
 #Calculatye total sales per year
-
+yg
