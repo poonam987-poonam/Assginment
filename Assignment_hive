@@ -30,3 +30,8 @@ use hive_class_b1;
     > )
     > row format delimited
     > fields terminated by ',';
+
+
+
+#load data from hdfs to hive
+hive> load data inpath '/tmp/data_2/sales_order_data.csv' into table sales_order_orc ;
