@@ -42,3 +42,7 @@ hadoop fs -put /home/cloudera/data/sales_order_data.csv /tmp/data_2
 
 #load data from hdfs to hive
 hive> load data inpath '/tmp/data_2/sales_order_data.csv' into table sales_order_orc ;
+
+
+#Calculatye total sales per year
+
