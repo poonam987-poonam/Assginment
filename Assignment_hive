@@ -2,3 +2,31 @@
 create database hive_class_b1;
 show databases;
 use hive_class_b1;
+
+
+ create table sales_order_orc
+    > (
+    > order_id int,
+    > quantity int,
+    > price_each float,
+    > order_number float,
+    > sales float,
+    > status string,
+    > qtr_id int,
+    > month int,
+    > year int,
+    > product_line string,
+    > msrp int,
+    > product_code string,
+    > phone string,
+    > city string,
+    > state string,
+    > postal_code string,
+    > country string,
+    > territory string,
+    > conatct_last_name string,
+    > contact_first_name string,
+    > deal_size string
+    > )
+    > row format delimited
+    > fields terminated by ',';
