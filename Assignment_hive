@@ -45,4 +45,10 @@ hive> load data inpath '/tmp/data_2/sales_order_data.csv' into table sales_order
 
 
 #Calculatye total sales per year
-yg
+hive> select sum(sales) as total_sales ,year from sales_order_orc group by year;
+o/p 
+2003    3516979.547241211
+2004    4724162.593383789
+2005    1791486.7086791992
+
+
