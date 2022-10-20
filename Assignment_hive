@@ -73,7 +73,8 @@ create table sales_order_data_orc
     >stored as orc;
     
     # copy data from sales_order_data to sales_order_data_orc
-    
+    insert into table sales_order_data_orc select *from sales_order_data;
+
 
 a. Calculatye total sales per year
 hive> select sum(sales) as total_sales ,year from sales_order_orc group by year;
