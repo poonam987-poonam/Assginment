@@ -1,0 +1,31 @@
+#create Schema for AgentLogingReport
+
+hive> create table agent_Loging_report
+    > (
+    > SL_id int,
+    > name string,
+    > date string,
+    > login_time string,
+    > logout_time string,
+    > duration string
+    > )
+    > row format delimited
+    > fields terminated by ','
+    >  tblproperties ("skip.header.line.count"="1");
+
+
+#create Schema for AgentPerformance
+create table agent_performance
+    > (
+    > sl_id int,
+    > date string,
+    > Agent_name string,
+    > tatal_chats int,
+    > Avg_responce string,
+    > Avg_Resolution string,
+    > Avg_rating string,
+    > total_feedback int
+    > )
+    > row format delimited
+    > fields terminated by ','
+    > tblproperties ( "skip.header.line.count" = "1");
