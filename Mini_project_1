@@ -38,3 +38,8 @@ hive> load data local inpath '/home/cloudera/data/AgentLogingReport.csv' into
 #load data into table agent_performance
 hive> load data local inpath '/home/cloudera/data/AgentPerformance.csv' into
     > table agent_performance ;
+
+
+
+
+3. List of all agents' names. 
