@@ -71,7 +71,15 @@ Manjunatha A    3.5946666666666665
 
 
 9. Agent name who have rating less than 3.5 
+hive> select agent_name , avg(avg_rating) as avg_rating_new from agent_performance
+    > group by agent_name
+    > having avg_rating_new < 3.5;
+
 10. Agent name who have rating more than 4.5 
+hive> select agent_name , avg(avg_rating) as avg_rating_new from agent_performance
+    > group by agent_name
+    > having avg_rating_new > 4.5;
+
 11. How many feedback agents have received more than 4.5 average
 12. average weekly response time for each agent 
 13. average weekly resolution time for each agents 
