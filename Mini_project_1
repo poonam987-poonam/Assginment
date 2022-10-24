@@ -63,6 +63,11 @@ hive> select agent_name , sum(toatl_feedback) as toatal_feedback from agent_perf
 hive> select agent_name , avg(avg_rating) as avg_rating_new from agent_performance
     > group by agent_name
     > having avg_rating_new between 3.5 and 4 ;
+    
+Boktiar Ahmed Bappy     3.5679999999999996
+Ishawant Kumar  3.543333333333334
+Khushboo Priya  3.703666666666666
+Manjunatha A    3.5946666666666665
 
 
 9. Agent name who have rating less than 3.5 
