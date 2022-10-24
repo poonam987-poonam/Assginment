@@ -60,6 +60,8 @@ hive> select name , count(distinct date) as total_working_days from agent_loging
 hive> select agent_name , sum(toatl_feedback) as toatal_feedback from agent_performance group by agent_name;
 
 8. Agent name who have average rating between 3.5 to 4 
+hive> select agnet_name , avg_rating from agent_performance where avg_rating between 3.5 and 4;
+
 9. Agent name who have rating less than 3.5 
 10. Agent name who have rating more than 4.5 
 11. How many feedback agents have received more than 4.5 average
