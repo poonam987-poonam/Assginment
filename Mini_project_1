@@ -54,8 +54,11 @@ hive> select name , count(distinct date) as total_working_days from agent_loging
 
 
 6. Total query that each agent have taken 
-select name , count(toatl_chats) as query from agent_loging_report;
+ select agent_name , sum(tatal_chats) as query from agent_performance group by agent_name;
+
 7. Total Feedback that each agent have received 
+hive> select agent_name , sum(toatl_feedback) as toatal_feedback from agent_performance group by agent_name;
+
 8. Agent name who have average rating between 3.5 to 4 
 9. Agent name who have rating less than 3.5 
 10. Agent name who have rating more than 4.5 
