@@ -46,9 +46,11 @@ hive> load data local inpath '/home/cloudera/data/AgentPerformance.csv' into
 select distinct(name) from agent_loging_report;
 
 4. Find out agent average rating.
+select avg(avg_rating) from agent_loging_report;
 
 
 5. Total working days for each agents 
+
 6. Total query that each agent have taken 
 7. Total Feedback that each agent have received 
 8. Agent name who have average rating between 3.5 to 4 
