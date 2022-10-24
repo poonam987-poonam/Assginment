@@ -29,3 +29,12 @@ create table agent_performance
     > row format delimited
     > fields terminated by ','
     > tblproperties ( "skip.header.line.count" = "1");
+
+#load data into table agent_loging_report
+hive> load data local inpath '/home/cloudera/data/AgentLogingReport.csv' into
+    > table agent_loging_report ;
+
+
+#load data into table agent_performance
+hive> load data local inpath '/home/cloudera/data/AgentPerformance.csv' into
+    > table agent_performance ;
