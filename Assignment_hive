@@ -1,93 +1,157 @@
-#download the Data file  ----> https://github.com/poonam987-poonam/Assginment/blob/main/sales_order_data.csv
-create database hive_class_b1;
-show databases;
-use hive_class_b1;
+Hive-Final-Mini-Project-1-Solution
 
 
- create table sales_order_data
-    > (
-    > order_id int,
-    > quantity int,
-    > price_each float,
-    > order_number float,
-    > sales float,
-    > status string,
-    > qtr_id int,
-    > month int,
-    > year int,
-    > product_line string,
-    > msrp int,
-    > product_code string,
-    > phone string,
-    > city string,
-    > state string,
-    > postal_code string,
-    > country string,
-    > territory string,
-    > conatct_last_name string,
-    > contact_first_name string,
-    > deal_size string
-    > )
-    > row format delimited
-    > fields terminated by ','
-    >tblproperties("skip.header.line.count"="1");
 
-set hive.cli.print.header = true ;
+Download Dataset 1 - https://drive.google.com/file/d/1WrG-9qv6atP-W3P_-gYln1hHyFKRKMHP/view
 
-#create directory in HDFS 
-$ hadoop fs -mkdir /tmp/data_2
-
-#load data local to HDFS
-hadoop fs -put /home/cloudera/data/sales_order_data.csv /tmp/data_2
+Download Dataset 2 - https://drive.google.com/file/d/1-JIPCZ34dyN6k9CqJa-Y8yxIGq6vTVXU/view
 
 
-#load data from hdfs to hive
-hive> load data inpath '/tmp/data_2/sales_order_data.csv' into table sales_order_orc ;
+
+1. Create a schema based on the given dataset
+
+create table agentperf
+    (
+    s_no int,
+    date string,
+    agent_name string,
+    total_chats int,
+    avg_resp_time string,
+    avg_resol_time string,
+    avg_rating float,
+    total_feedback int
+    )
+    row format delimited
+    fields terminated by ','
+    tblproperties ("skip.header.line.count"="1");
 
 
-# load sales_order_data.csv data into above mentioned tables
-create table sales_order_data_orc
-    > (
-    > order_id int,
-    > quantity int,
-    > price_each float,
-    > order_number float,
-    > sales float,
-    > status string,
-    > qtr_id int,
-    > month int,
-    > year int,
-    > product_line string,
-    > msrp int,
-    > product_code string,
-    > phone string,
-    > city string,
-    > state string,
-    > postal_code string,
-    > country string,
-    > territory string,
-    > conatct_last_name string,
-    > contact_first_name string,
-    > deal_size string
-    > )
-    >stored as orc;
-    
-    # copy data from sales_order_data to sales_order_data_orc
-    insert into table sales_order_data_orc select *from sales_order_data;
+create table agentloging
+    (
+    s_no int,
+    agent_name string,
+    date string,
+    login_time string,
+    logout_time string,
+    duration string
+    )
+  row format delimited
+    fields terminated by ','
+    tblproperties ("skip.header.line.count"="1");
 
 
-a. Calculatye total sales per year
-hive> select sum(sales) as total_sales ,year from sales_order_orc group by year;
-o/p 
-2003    3516979.547241211
-2004    4724162.593383789
-2005    1791486.7086791992
 
-b. Find a product for which maximum orders were placed
+2. Dump the data inside the hdfs in the given schema location.
 
-c. Calculate the total sales for each quarter
+load data local inpath 'file:///home/cloudera/data/AgentPerformance.csv' into table agentperf;
 
-d. In which quarter sales was minimum
-e. In which country sales was maximum and in which country sales was minimum
-f. Calculate quartelry sales for each city
-h. Find a month for each year in which maximum number of quantities were sold
+load data local inpath 'file:///home/cloudera/data/AgentLogingReport.csv' into table agentloging;
+
+
+
+3. List of all agents' names.
+
+select distinct(agent_name) from agentloging;
+
+
+
+4. Find out agent average rating.
+
+select agent_name, avg(avg_rating) from agentperf group by(agent_name);
+
+
+
+5. Total working days for each agents.
+
+select agent_name, count(distinct date) as working_day from agentloging group by(agent_name);
+
+
+
+6. Total query that each agent have taken.
+
+select agent_name, sum(total_chats) from agentperf group by(agent_name);
+
+
+
+7. Total Feedback that each agent have received.
+
+      select agent_name, sum(total_feedback) from agentperf group by(agent_name);
+ 
+
+     
+8. Agent name who have average rating between 3.5 to 4.
+
+select agent_name, avg(avg_rating) as average from agentperf group by(agent_name) having average between 3.5 and 4;
+
+
+
+9. Agent name who have rating less than 3.5.
+
+select agent_name, avg(avg_rating) as average from agentperf group by(agent_name) having average < 3.5;
+
+
+
+10. Agent name who have rating more than 4.5.
+
+select agent_name, avg(avg_rating) as average from agentperf group by(agent_name) having average > 4.5;
+
+
+
+11. How many feedback agents have received more than 4.5 average.
+
+select agent_name ,feedback from (select agent_name, sum(total_feedback) as feedback, avg(avg_rating) as average from agentperf group by (agent_name))t1 where average > 4.5;
+
+
+
+12. average weekly response time for each agent.
+
+select concat("week", weekofyear (from_unixtime (unix_timestamp (date, 'mm/dd/yyyy'),  'yyyy-mm-dd'))),  agent_name,  from_unixtime ( cast(  avg( unix_timestamp( avg_resp_time, 'HH:mm:ss'))as bigint), 'HH:mm:ss') as avg_time  from agentperf  group by concat  ("week ",weekofyear (from_unixtime (unix_timestamp (date,'mm/dd/yyyy'), 'yyyy-mm-dd'))), agent_name;
+
+
+
+13. average weekly resolution time for each agents.
+
+select concat("week ",weekofyear  (from_unixtime (unix_timestamp (date, 'mm/dd/yyyy'), 'yyyy-mm-dd'))),  agent_name, from_unixtime  (    cast(          avg( unix_timestamp( avg_resol_time, 'HH:mm:ss'))as bigint), 'HH:mm:ss') as avg_time  from agentperf  group by concat ("week ",weekofyear (from_unixtime (unix_timestamp (date,'mm/dd/yyyy'), 'yyyy-mm-dd'))), agent_name;
+
+
+
+14. Find the number of chat on which they have received a feedback.
+
+      select sum(total_chats)  from agentperf where total_feedback > 0;
+
+
+      
+15. Total contribution hour for each and every agents weekly basis.
+
+select concat("week", weekofyear (from_unixtime (unix_timestamp (date, 'dd-MMM-yy'), 'yyyy-mm-dd'))), agent_name, from_unixtime (cast (sum (unix_timestamp (duration, 'HH:mm:ss'))as bigint), 'HH:mm:ss') as avg_time  from agentloging  group by concat( "week ", weekofyear (from_unixtime (unix_timestamp (date, 'dd-MMM-yy'), 'yyyy-mm-dd'))), agent_name;
+
+
+
+16. Perform inner join, left join and right join based on the agent column and after joining the table export that data into your local system.
+
+hive -e "select l.s_no, l.agent_name, l.date, l.login_time,l.logout_time, l.duration, p.total_chats,p.avg_resp_time,p.avg_resol_time,p.avg_rating,p.total_feedback from agentlog.agentloging l inner join agentlog.agentperf p on l.agent_name=p.agent_name;" > /home/cloudera/data/inner_join.csv
+
+hive -e "select l.s_no, l.agent_name, l.date, l.login_time,l.logout_time, l.duration, p.total_chats,p.avg_resp_time,p.avg_resolime,p.avg_rating,p.total_feedback from agentlog.agentloging l left join agentlog.agentperf p on l.agent_name=p.agent_name;" > /home/cloudera/data/left_join.csv
+
+hive -e "select l.s_no, l.agent_name, l.date, l.login_time,l.logout_time, l.duration, p.total_chats,p.avg_resp_time,p.avg_resol_time,p.avg_rating,p.total_feedback from agentlog.agentloging l right join agentlog.agentperf p on l.agent_name=p.agent_name;" > /home/cloudera/data/right_join.csv
+
+
+
+17. Perform partitioning on top of the agent column and then on top of that perform bucketing for each partitioning.
+
+create table agent_parting_bucketing 
+(
+S_no int,
+date string,
+login_time string,
+logout_time string,
+duration string
+)
+partitioned by (agent_name string)
+clustered by (s_no)
+sorted by (s_no)  
+into 2 buckets;
+
+insert overwrite table agent_partition_bucketing partition(agent_name) select s_no,date,login_time,logout_time,duration,agent_name from agentloging;
+
+
